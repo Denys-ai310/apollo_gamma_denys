@@ -1,0 +1,6 @@
+If the system is equipped with a GPU, use the following command to install torch:
+
+pip install torch==1.13.1+cu116 -f https://download.pytorch.org/whl/torch_stable.html
+
+Otherwise, for CPU only, use the following command:
+pip install torch==1.13.1
