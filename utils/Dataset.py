@@ -2,8 +2,12 @@ import pandas as pd
 import numpy as np
 from ta import add_all_ta_features
 from ta.utils import dropna
-from apollo_gamma.utils import utils as ut
-from apollo_gamma.utils import indicators_utils as custom_indicators
+import os
+import sys
+# Add project root to Python path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
+from utils import utils as ut
+from utils import indicators_utils as custom_indicators
 import os
 
 import warnings

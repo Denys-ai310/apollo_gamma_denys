@@ -1,16 +1,20 @@
 # import config
 import indicators_utils as custom_indicators
 from stable_baselines3 import PPO, TD3, DDPG,  SAC, A2C
-from apollo_gamma.learners import learner_drl
-from apollo_gamma.utils import paths, Dataset, utils
-from apollo_gamma.drl_envs.env_ld_sw_dataset import EnvTrading
+import os
+import sys
+# Add project root to Python path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
+from learners import learner_drl
+from utils import paths, Dataset, utils
+from drl_envs.env_ld_sw_dataset import EnvTrading
 import os
 import torch
 import sys
 import numpy as np
 import random
 import pandas as pd
-from apollo_gamma.backtest import backtest
+from backtest import backtest
 import quantstats as qs
 import glob
 # set random seeds in random module, numpy module and PyTorch module.

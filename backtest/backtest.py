@@ -1,7 +1,11 @@
 import pandas as pd
 import math
 import numpy as np
-from apollo_gamma.utils import paths
+import os
+import sys
+# Add project root to Python path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
+from utils import paths
 from scipy import stats
 import warnings
 import quantstats as qs

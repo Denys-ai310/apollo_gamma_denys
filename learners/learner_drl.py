@@ -1,8 +1,12 @@
 import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
 warnings.filterwarnings('ignore')
-from apollo_gamma.backtest import backtest
-from apollo_gamma.utils import utils
+import os
+import sys
+# Add project root to Python path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
+from backtest import backtest
+from utils import utils
 import sqlite3
 import os
 import shutil
