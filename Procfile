@@ -1,0 +1,1 @@
+web: bash training/btc/24h/train_all_parallel.sh
