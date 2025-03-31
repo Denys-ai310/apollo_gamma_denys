@@ -139,9 +139,6 @@ class CustomSB():
         print("After preprocessing:", df_input.shape)
         print("Column names:", df_input.columns.tolist())
 
-        if df_backtest.shape[1] > test_obs.shape[0]:
-            df_backtest = df_backtest.iloc[:, :test_obs.shape[0]]
-
         
 
 
@@ -571,9 +568,6 @@ class CustomD3RLPY():
 
         print("After preprocessing:", df_input.shape)
         print("Column names:", df_input.columns.tolist())
-
-        if df_backtest.shape[1] > test_obs.shape[0]:
-            df_backtest = df_backtest.iloc[:, :test_obs.shape[0]]
 
 
         ### loop over all saved models during training
