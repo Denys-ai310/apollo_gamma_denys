@@ -228,7 +228,8 @@ class Backtest():
 				break
 		
 		### backtest dataframe
-		df_backtest = pd.DataFrame(self.array_to_save, columns = self.header_names)
+		df_backtest = pd.DataFrame(self.array_to_save, columns = self.header_names)		
+		df_backtest.set_index('datetime', inplace=True)
 		df_backtest["pnl_sum"] = df_backtest["pnl"].cumsum()
 		### sharpe
 		if len(df_backtest) > 1:
