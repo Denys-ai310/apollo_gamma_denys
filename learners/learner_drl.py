@@ -124,6 +124,7 @@ class CustomSB():
 
 
         df_input = pd.concat([self.obj_dataset.X_backtest, self.obj_dataset.X_forwardtest])
+        
         df_backtest = pd.concat([self.obj_dataset.df_backtest, self.obj_dataset.df_forwardtest])
 
         # print(df_input)
@@ -133,8 +134,8 @@ class CustomSB():
         print("Before preprocessing:", df_input.shape)
 
         # Select only the first 13 columns if we have more
-        if df_input.shape[1] > test_obs.shape[0]:
-            df_input = df_input.iloc[:, :test_obs.shape[0]]
+        # if df_input.shape[1] > test_obs.shape[0]:
+        #     df_input = df_input.iloc[:, :test_obs.shape[0]]
 
         print("After preprocessing:", df_input.shape)
         print("Column names:", df_input.columns.tolist())
@@ -150,10 +151,15 @@ class CustomSB():
             model_name = str(os.path.basename(list_of_models_path[i])).split('.zip')[0]
             # model_name_shortened = model_name.split('_steps')[0]
 
+            # print("df_input:", df_input.shape)
+            # if df_input.shape[1] > test_obs.shape[0]:
+            #     df_input = df_input.iloc[:, :test_obs.shape[0]]
+
 
             ### backtest
             bt_ledger_, bt_ending_balance, bt_sharpe, bt_r2, bt_pnl_percent, df_pred = utils.predict_and_backtest_drl(self.library, \
                                             'backtest', tmp_model, df_input, df_backtest, self.instrument_exchange_timehorizon_utc, self.transaction_fee, self.take_profit_percent, self.stop_loss_percent, self.leverage)
+            
             
             
 
@@ -186,10 +192,13 @@ class CustomSB():
                         best_model_name = model_name
                         best_model_path = list_of_models_path[i]
                         df_best_ledger = bt_ledger_
-            # 
+            
+            
+           
 
 
         if not(best_model_name == None):
+            
 
             tmp_model = self.algo.load(best_model_path)
             ### backtest
@@ -220,12 +229,23 @@ class CustomSB():
 
             bt_ledger.to_csv(os.path.join(self.path_bt_results, f'bt_ledger_{best_model_name}.csv'))
             ft_ledger.to_csv(os.path.join(self.path_ft_results, f'ft_ledger_{best_model_name}.csv'))
+            
 
-            df_best_ledger.set_index('datetime', inplace=True)
+            # df_best_ledger.set_index('datetime', inplace=True)
             df_best_ledger = df_best_ledger[df_best_ledger['sell_price'] != 0]
+            
             df_best_ledger['pnl'] = df_best_ledger['pnl'] + self.transaction_fee
+            # df_best_ledger['pnl'] = df_best_ledger['pnl'].astype(float)/100    
             df_best_ledger = df_best_ledger['pnl']/100
-            df_best_ledger.index = df_best_ledger.index.tz_convert(None)
+            print("----------------------------------")
+            print("bt_ledger_shape:", df_best_ledger.shape)
+            print("bt_ledger_columns:", df_best_ledger.head())
+            
+            # Convert timezone-aware index to timezone-naive
+            df_best_ledger.index = df_best_ledger.index.tz_localize(None)
+
+            
+            # df_best_ledger.index = df_best_ledger.index.tz_convert(None)
             path_report = os.path.join(self.models_directory, f'{best_model_name}.html')
             title_report = str(self.algo).split('.')[-2].upper() + ' Results'
             qs.reports.html(df_best_ledger, title=title_report, output=True, compounded=False, download_filename=path_report)
@@ -557,18 +577,6 @@ class CustomD3RLPY():
         df_input = pd.concat([self.obj_dataset.X_backtest, self.obj_dataset.X_forwardtest])
         df_backtest = pd.concat([self.obj_dataset.df_backtest, self.obj_dataset.df_forwardtest])
 
-        # print(df_backtest)
-        test_obs = self.train_env.reset()
-        # Add preprocessing to match training data
-        print("Before preprocessing:", df_input.shape)
-
-        # Select only the first 13 columns if we have more
-        if df_input.shape[1] > test_obs.shape[0]:
-            df_input = df_input.iloc[:, :test_obs.shape[0]]
-
-        print("After preprocessing:", df_input.shape)
-        print("Column names:", df_input.columns.tolist())
-
 
         ### loop over all saved models during training
         for i in range(len(list_of_models_path)):
@@ -594,8 +602,6 @@ class CustomD3RLPY():
             # print(bt_record)
 
             pred_long_percent, pred_short_percent, acc_overal, acc_long, acc_short = utils.get_accuracies(df_pred, bt_ledger_, self.transaction_fee)
-
-            print('accuracies:', pred_long_percent, pred_short_percent, acc_overal, acc_long, acc_short)
 
             if pred_long_percent >= 0.4 and pred_short_percent >= 0.4:
                 if acc_long >= 0.5 and acc_short >= 0.5:
@@ -713,7 +719,7 @@ class CustomD3RLPY():
         #     ### perform backtest and insert into db
         #     arg_vector = [self.algo, self.path_rw_models_predictions, self.algo_name, self.current_dir, self.path_rw_db, self.path_rw_results, list_of_models_path, 'rw', self.instrument_exchange_timehorizon_utc]
         #     obj_generate_bt_db = GenerateBacktestDB(arg_vector)
-        #     obj_generate_bt_db.run()       
+        #     obj_generate_bt_db.run()              
 
 class D3Retraining():    
     def __init__(self, arg_vector):

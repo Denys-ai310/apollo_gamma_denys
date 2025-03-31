@@ -83,45 +83,53 @@ class Dataset:
 		# print()
 
 	def create_dataset(self, df_tmp, df_type):
-		# print('\n', df_type)
 		df = df_tmp.copy()
 		close_only = df_tmp[['close']].copy()
 
-		##############################################################################
-		### create a new dataframe based on rolling window size
 		df_rolling_window = ut.np_create_rolling_window(df, self.rolling_window_size)
-		# print(df_rolling_window.columns)
-		# print(df_rolling_window)
-
-		### take log difference of df_rolling_window except for columns containing binary or negative values
-		# # Identify columns with binary values or negative values
-		# binary_cols = df_rolling_window.columns[df_rolling_window.isin([0, 1]).all()]
-		# negative_cols = df_rolling_window.columns[(df_rolling_window <= 0).any()]
-
 		df_train_log_transformed = df_rolling_window.copy()
 
+		# First pass: identify columns to keep/drop consistently across all datasets
 		list_non_logged_cols = []
 		list_negative_cols = []
-		# Calculate log difference only for non-binary and non-negative columns
 		for column in df_rolling_window.columns:
-			# if column not in binary_cols and column not in negative_cols:
-				# df_train_log_transformed[column] = np.log(df_rolling_window[column]).diff()
 			if all(df_rolling_window[column].isin([-1, 0, 1])) or\
-				all(df_rolling_window[column].isin([-1, 1])) or\
-				all(df_rolling_window[column].isin([1, 0])):
+			   all(df_rolling_window[column].isin([-1, 1])) or\
+			   all(df_rolling_window[column].isin([1, 0])):
 				list_non_logged_cols.append(column)
-
 			elif any(df_rolling_window[column] == 0) or any(df_rolling_window[column] < 0):
 				list_negative_cols.append(column)
-			
 			else:
 				df_train_log_transformed[column] = np.log(df_rolling_window[column]).diff()
 
+		# Store the columns to drop if this is training data
+		if df_type == 'train':
+			self.columns_to_drop = list_negative_cols
+		
+		# Use the stored columns to drop for backtest and forwardtest
+		if df_type in ['backtest', 'forwardtest']:
+			if hasattr(self, 'columns_to_drop'):
+				list_negative_cols = self.columns_to_drop
+			else:
+				print("Warning: No training columns reference found")
 
-		# print(list_negative_cols)
+		# Drop the negative columns consistently
 		if len(list_negative_cols) > 0:
 			df_train_log_transformed = df_train_log_transformed.drop(columns=list_negative_cols)
-		# print(df_train_log_transformed)
+
+		print(f"{df_type} columns before mapping:", df_train_log_transformed.columns)
+
+		# Store the final columns if this is training data
+		if df_type == 'train':
+			self.final_columns = df_train_log_transformed.columns.tolist()
+		
+		# Ensure consistent columns with training data
+		if df_type in ['backtest', 'forwardtest']:
+			if hasattr(self, 'final_columns'):
+				missing_cols = set(self.final_columns) - set(df_train_log_transformed.columns)
+				for col in missing_cols:
+					df_train_log_transformed[col] = 0  # or another appropriate default value
+				df_train_log_transformed = df_train_log_transformed[self.final_columns]
 
 		### find if there are any missing column numbers, an fix it.
 		max_column_index = max(map(int, df_train_log_transformed.columns), default=-1)
@@ -129,10 +137,9 @@ class Dataset:
 		mapping = {col: str(i) for i, col in enumerate(df_train_log_transformed.columns)}
 		df_train_log_transformed.rename(columns=mapping, inplace=True)
 
-		# print(df_train_log_transformed)
-
-
 		df_train_log_transformed.dropna(inplace=True)
+
+		print(f"{df_type} final columns:", df_train_log_transformed.columns)
 
 		### create target, i.e., close only values
 		df_target_log_transformed = np.log(close_only) - np.log(close_only.shift(1)) 
@@ -141,60 +148,26 @@ class Dataset:
 		df_target_log_transformed.dropna(inplace=True)
 		df_target_log_transformed.rename(columns={'close': 'target'}, inplace=True)
 		df_target_log_transformed['direction'] = np.sign(df_target_log_transformed['target'])
-		# print(df_target_log_transformed)
 
 		### reindex df_log_transformed to match the length of df_close_log_transformed (target)
 		df_train_log_transformed = df_train_log_transformed.reindex(df_target_log_transformed.index)
-		# print(df_train_log_transformed)
-
-		
 
 		df_bt_ = df_target_log_transformed.copy()
 		df_bt_.index = pd.DatetimeIndex(df_bt_.index) + pd.DateOffset(minutes=self.time_horizon_minutes)    
-		# df_bt_['target'] = np.sign(df_bt_['target'])
-		# df_bt_.rename(columns={'target':'actual_direction'}, inplace=True)
-		# # print(df_bt_)
-		
 
-		# print(df_bt)
 		if df_type == 'backtest':
 			self.df_backtest = df_target_log_transformed.copy()
 			self.df_backtest.index = pd.DatetimeIndex(self.df_backtest.index) + pd.DateOffset(minutes=self.time_horizon_minutes)   
-			# print(self.df_backtest)
 
 		elif df_type == 'forwardtest':
 			self.df_forwardtest = df_target_log_transformed.copy()
 			self.df_forwardtest.index = pd.DatetimeIndex(self.df_forwardtest.index) + pd.DateOffset(minutes=self.time_horizon_minutes)   
-			# print(self.df_forwardtest)
 					
 		# Check for NaN values
 		has_nan_or_inf = df_train_log_transformed.isna().any().any() or np.isinf(df_train_log_transformed.values).any()
 		if has_nan_or_inf:
 			print("There are NaN/inf values in the DataFrame.")
 			exit(0)
-
-		# print(df_train_log_transformed)
-		# print(df_target_log_transformed)
-
-		# Before returning, if this is for DRL training/prediction, 
-		# we need to ensure the data is in the correct shape
-		
-		
-		# if hasattr(self, 'learner') and self.learner == 'drl':
-		# 	# Select only the first 13 columns if we have more
-		# 	if df_train_log_transformed.shape[1] > 13:
-		# 		df_train_log_transformed = df_train_log_transformed.iloc[:, :13]
-		# 	# Pad with zeros if we have fewer than 13 columns
-		# 	elif df_train_log_transformed.shape[1] < 13:
-		# 		missing_cols = 13 - df_train_log_transformed.shape[1]
-		# 		for i in range(missing_cols):
-		# 			df_train_log_transformed[f'padding_{i}'] = 0
-				
-		# 	# Take only the most recent observation
-		# 	df_train_log_transformed = df_train_log_transformed.iloc[-1:, :]
-			
-		# 	# Convert to numpy array and reshape to (13,) for single prediction
-		# 	df_train_log_transformed = df_train_log_transformed.to_numpy().flatten()
 
 		return df_train_log_transformed, df_target_log_transformed
 
