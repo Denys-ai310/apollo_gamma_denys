@@ -9,6 +9,7 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     fonts-liberation \
     fontconfig \
+    fonts-arial \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements file (you'll need to create this)
