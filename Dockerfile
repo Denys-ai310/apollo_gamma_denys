@@ -19,7 +19,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Make the training scripts executable
-RUN chmod +x training/btc/24h/train_all_sequentially.sh
+RUN chmod +x training/btc/24h/*.sh
 
 # Set the default command
 CMD ["bash", "training/btc/24h/train_all_sequentially.sh"]
