@@ -1,13 +1,13 @@
 cd "$(dirname "$0")"
 
-./generic.sh model_free.py a2c
-./generic.sh model_free.py ppo
-./generic.sh model_free.py ddpg
-./generic.sh model_free.py sac
-./generic.sh model_free.py td3
+sh ./generic.sh model_free.py a2c
+sh ./generic.sh model_free.py ppo
+sh ./generic.sh model_free.py ddpg
+sh ./generic.sh model_free.py sac
+sh ./generic.sh model_free.py td3
 
-./generic.sh model_based.py bear
-./generic.sh model_based.py awac
-./generic.sh model_based.py td3plusbc
-./generic.sh model_based.py cql
-./generic.sh model_based.py plas
+sh ./generic.sh model_based.py bear
+sh ./generic.sh model_based.py awac
+sh ./generic.sh model_based.py td3plusbc
+sh ./generic.sh model_based.py cql
+sh ./generic.sh model_based.py plas
