@@ -9,8 +9,14 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     fonts-liberation \
     fontconfig \
-    fonts-arial \
-    && rm -rf /var/lib/apt/lists/*
+    wget \
+    && rm -rf /var/lib/apt/lists/* \
+    && echo "deb http://ftp.us.debian.org/debian/ bullseye contrib" >> /etc/apt/sources.list \
+    && apt-get update \
+    && echo "ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true" | debconf-set-selections \
+    && apt-get install -y ttf-mscorefonts-installer \
+    && rm -rf /var/lib/apt/lists/* \
+    && fc-cache -f -v
 
 # Copy requirements file (you'll need to create this)
 COPY requirements.txt .
