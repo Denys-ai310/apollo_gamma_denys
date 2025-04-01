@@ -18,8 +18,8 @@ import os
 import sys
 # Add project root to Python path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
-from apollo_gamma.utils import Dataset, paths
-from apollo_gamma.backtest import backtest
+from app.utils import Dataset, paths
+from app.backtest import backtest
 import quantstats as qs
 import glob 
 import torch

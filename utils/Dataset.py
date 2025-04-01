@@ -6,8 +6,8 @@ import os
 import sys
 # Add project root to Python path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
-from apollo_gamma.utils import utils as ut
-from apollo_gamma.utils import indicators_utils as custom_indicators
+from app.utils import utils as ut
+from app.utils import indicators_utils as custom_indicators
 import os
 
 import warnings

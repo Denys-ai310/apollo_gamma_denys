@@ -16,7 +16,7 @@ import random
 import pandas as pd
 # Add project root to Python path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
-from apollo_gamma.backtest import backtest
+from app.backtest import backtest
 import quantstats as qs
 import glob
 # set random seeds in random module, numpy module and PyTorch module.

@@ -4,9 +4,9 @@ import sys
 from d3rlpy.algos import PLAS, BEAR, AWAC, TD3PlusBC, CQL
 # Add project root to Python path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
-from apollo_gamma.learners import learner_drl
-from apollo_gamma.utils import paths, Dataset, utils, d3_dd_dataset
-from apollo_gamma.drl_envs.env_ld_sw_dataset import EnvTrading
+from app.learners import learner_drl
+from app.utils import paths, Dataset, utils, d3_dd_dataset
+from app.drl_envs.env_ld_sw_dataset import EnvTrading
 
 import warnings
 # import time
