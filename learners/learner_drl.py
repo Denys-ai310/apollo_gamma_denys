@@ -28,8 +28,7 @@ import gym
 import quantstats as qs
 import torch
 from sklearn.preprocessing import MinMaxScaler
-import matplotlib.pyplot as plt
-plt.rcParams['font.family'] = 'DejaVu Sans'
+
 
 config = utils.get_config_file()
 # models_directory = str(config['training']['models_directory'])

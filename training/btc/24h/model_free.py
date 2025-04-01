@@ -7,6 +7,8 @@ from stable_baselines3 import PPO, TD3, DDPG,  SAC, A2C
 from learners import learner_drl
 from utils import paths, Dataset, utils
 from drl_envs.env_ld_sw_dataset import EnvTrading
+import matplotlib.pyplot as plt
+plt.rcParams['font.family'] = 'DejaVu Sans'
 
 
 def get_algo(algo):
