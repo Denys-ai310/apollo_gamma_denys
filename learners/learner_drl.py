@@ -28,6 +28,10 @@ import gym
 import quantstats as qs
 import torch
 from sklearn.preprocessing import MinMaxScaler
+import warnings
+import matplotlib
+matplotlib.use('Agg')  # Must be before any other matplotlib imports
+warnings.filterwarnings("ignore", category=UserWarning, module="matplotlib")
 
 
 config = utils.get_config_file()
