@@ -683,7 +683,9 @@ class CustomD3RLPY():
             df_best_ledger = df_best_ledger[df_best_ledger['sell_price'] != 0]
             df_best_ledger['pnl'] = df_best_ledger['pnl'] + self.transaction_fee
             df_best_ledger = df_best_ledger['pnl']/100
-            df_best_ledger.index = df_best_ledger.index.tz_convert(None)
+            # First localize to UTC, then convert to None (making it timezone-naive)
+            df_best_ledger.index = pd.to_datetime(df_best_ledger.index)
+            df_best_ledger.index = df_best_ledger.index.tz_localize('UTC').tz_convert(None)
             path_report = os.path.join(self.models_directory, f'{self.model_name_prefix}.html')
             title_report = str(self.algo).split('.')[-2].upper() + ' Results'
             qs.reports.html(df_best_ledger, title=title_report, output=True, compounded=False, download_filename=path_report)
