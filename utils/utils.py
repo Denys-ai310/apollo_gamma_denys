@@ -16,6 +16,8 @@ import sqlite3
 from datetime import datetime, timedelta
 import os
 import sys
+# Add project root to Python path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
 from apollo_gamma.utils import Dataset, paths
 from apollo_gamma.backtest import backtest
 import quantstats as qs

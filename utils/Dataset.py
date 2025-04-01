@@ -4,6 +4,8 @@ from ta import add_all_ta_features
 from ta.utils import dropna
 import os
 import sys
+# Add project root to Python path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
 from apollo_gamma.utils import utils as ut
 from apollo_gamma.utils import indicators_utils as custom_indicators
 import os

@@ -10,7 +10,7 @@ import os
 import sys
 # Add project root to Python path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
-from utils import utils
+from apollo_gamma.utils import utils
 config = utils.get_config_file()
 nb_samples = 1000
 
