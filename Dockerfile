@@ -22,4 +22,4 @@ COPY . .
 RUN chmod +x training/btc/24h/train_all_sequentially.sh
 
 # Set the default command
-CMD ["bash"]
+CMD ["bash", "training/btc/24h/train_all_sequentially.sh"]
