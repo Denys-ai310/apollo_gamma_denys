@@ -8,7 +8,11 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y \
     build-essential \
     fonts-liberation \
-    ttf-mscorefonts-installer \
+    wget \
+    && wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > /usr/share/keyrings/microsoft.gpg \
+    && echo "deb [signed-by=/usr/share/keyrings/microsoft.gpg] https://packages.microsoft.com/debian/11/prod bullseye main" > /etc/apt/sources.list.d/microsoft.list \
+    && apt-get update \
+    && apt-get install -y ttf-mscorefonts-installer \
     fontconfig \
     && rm -rf /var/lib/apt/lists/*
 
