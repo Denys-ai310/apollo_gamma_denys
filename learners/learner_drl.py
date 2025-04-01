@@ -238,6 +238,7 @@ class CustomSB():
             df_best_ledger['pnl'] = df_best_ledger['pnl'] + self.transaction_fee
             # df_best_ledger['pnl'] = df_best_ledger['pnl'].astype(float)/100    
             df_best_ledger = df_best_ledger['pnl']/100
+            df_best_ledger = df_best_ledger.resample('D').sum()
             print("----------------------------------")
             print("bt_ledger_shape:", df_best_ledger.shape)
             print("bt_ledger_columns:", df_best_ledger.head())
@@ -682,6 +683,7 @@ class CustomD3RLPY():
             df_best_ledger = df_best_ledger[df_best_ledger['sell_price'] != 0]
             df_best_ledger['pnl'] = df_best_ledger['pnl'] + self.transaction_fee
             df_best_ledger = df_best_ledger['pnl']/100
+            df_best_ledger = df_best_ledger.resample('D').sum()
             # First localize to UTC, then convert to None (making it timezone-naive)
             df_best_ledger.index = pd.to_datetime(df_best_ledger.index)
             df_best_ledger.index = df_best_ledger.index.tz_localize('UTC').tz_convert(None)
