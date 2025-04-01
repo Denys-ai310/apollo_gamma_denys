@@ -62,7 +62,7 @@ def train(algo):
 	split_triple = [config.training_start_date, config.backtest_duration, config.forwardtest_duration]
 	instrument_exchange_timehorizon_utc = [config.instrument, config.exchange, config.str_time_horizon, config.utc]
 	data_path = paths.get_hourly_utc(config.instrument, config.exchange, config.str_time_horizon, config.utc)
-	rolling_window_length = 32
+	rolling_window_length = 2
 
 	print('\n')
 	print('-'*60)

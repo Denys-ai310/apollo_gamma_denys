@@ -36,11 +36,11 @@ models_directory = 'models'
 gamma = 0.9
 learning_rate = 0.0005
 seed = 818
-total_timesteps = 20000
+total_timesteps = 2000
 # total_timesteps = 2000
 save_frequency = 1000
 
-nb_epochs = 20
+nb_epochs = 2
 # nb_epochs = 5
 
 
