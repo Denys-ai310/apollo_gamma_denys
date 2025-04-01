@@ -1,9 +1,10 @@
 import config
 import os
 import sys
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../../')))
 from d3rlpy.algos import PLAS, BEAR, AWAC, TD3PlusBC, CQL
 # Add project root to Python path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
 from app.learners import learner_drl
 from app.utils import paths, Dataset, utils, d3_dd_dataset
 from app.drl_envs.env_ld_sw_dataset import EnvTrading
