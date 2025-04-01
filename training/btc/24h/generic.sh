@@ -4,4 +4,4 @@
 cd "$(dirname "$0")"
 
 # Run the Python script with the provided arguments
-python "$1" "$2"
+/workspace/.heroku/python/bin/python "$1" "$2"
