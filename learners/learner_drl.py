@@ -5,8 +5,8 @@ import os
 import sys
 # Add project root to Python path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
-from apollo_gamma.backtest import backtest
-from apollo_gamma.utils import utils
+from app.backtest import backtest
+from app.utils import utils
 import sqlite3
 import os
 import shutil

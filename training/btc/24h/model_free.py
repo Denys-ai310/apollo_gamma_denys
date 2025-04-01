@@ -5,8 +5,8 @@ import sys
 from stable_baselines3 import PPO, TD3, DDPG,  SAC, A2C
 # Add project root to Python path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
-from apollo_gamma.learners import learner_drl
-from apollo_gamma.utils import paths, Dataset, utils
+from app.learners import learner_drl
+from app.utils import paths, Dataset, utils
 from apollo_gamma.drl_envs.env_ld_sw_dataset import EnvTrading
 import matplotlib.pyplot as plt
 plt.rcParams['font.family'] = 'DejaVu Sans'
