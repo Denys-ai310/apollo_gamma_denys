@@ -30,8 +30,7 @@ import torch
 from sklearn.preprocessing import MinMaxScaler
 import warnings
 import matplotlib
-matplotlib.use('Agg')  # Must be before any other matplotlib imports
-warnings.filterwarnings("ignore", category=UserWarning, module="matplotlib")
+
 
 
 config = utils.get_config_file()
@@ -254,6 +253,10 @@ class CustomSB():
             # df_best_ledger.index = df_best_ledger.index.tz_convert(None)
             path_report = os.path.join(self.models_directory, f'{best_model_name}.html')
             title_report = str(self.algo).split('.')[-2].upper() + ' Results'
+            matplotlib.use('Agg')  # Must be before any other matplotlib imports
+            warnings.filterwarnings("ignore", category=UserWarning, module="matplotlib")
+            matplotlib.rcParams['font.family'] = ['sans-serif']
+            matplotlib.rcParams['font.sans-serif'] = ['Liberation Sans', 'DejaVu Sans', 'Arial']
             qs.reports.html(df_best_ledger, title=title_report, output=True, compounded=False, download_filename=path_report)
 
         utils.delete_dir(self.path_for_saving_models)
@@ -693,6 +696,10 @@ class CustomD3RLPY():
             df_best_ledger.index = df_best_ledger.index.tz_localize('UTC').tz_convert(None)
             path_report = os.path.join(self.models_directory, f'{self.model_name_prefix}.html')
             title_report = str(self.algo).split('.')[-2].upper() + ' Results'
+            matplotlib.use('Agg')  # Must be before any other matplotlib imports
+            warnings.filterwarnings("ignore", category=UserWarning, module="matplotlib")
+            matplotlib.rcParams['font.family'] = ['sans-serif']
+            matplotlib.rcParams['font.sans-serif'] = ['Liberation Sans', 'DejaVu Sans', 'Arial']
             qs.reports.html(df_best_ledger, title=title_report, output=True, compounded=False, download_filename=path_report)
             # qs.reports.html(df_best_ledger, output=True, compounded=False, download_filename=path_report)
 
