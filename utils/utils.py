@@ -465,7 +465,7 @@ def delete_exisiting_data(algo_name, table_name, path_bt_results, path_bt_db, pa
 
 
 def get_ledger_days(ledger):
-
+	ledger['datetime'] = ledger.index
 	ledger['datetime'] = pd.to_datetime(ledger['datetime'])
 	start_date = ledger['datetime'].min()
 	end_date = ledger['datetime'].max()
