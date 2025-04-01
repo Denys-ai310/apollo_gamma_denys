@@ -14,7 +14,7 @@ import sys
 import numpy as np
 import random
 import pandas as pd
-from backtest import backtest
+from apollo_gamma.backtest import backtest
 import quantstats as qs
 import glob
 # set random seeds in random module, numpy module and PyTorch module.

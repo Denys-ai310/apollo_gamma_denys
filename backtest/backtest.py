@@ -3,9 +3,7 @@ import math
 import numpy as np
 import os
 import sys
-# Add project root to Python path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
-from utils import paths
+from apollo_gamma.utils import paths
 from scipy import stats
 import warnings
 import quantstats as qs
